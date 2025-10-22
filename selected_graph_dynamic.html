@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>集智百科精品词条动态图</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .m-graph {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .m-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 999;
+      transition: opacity 1s ease-in-out;
+    }
+    .m-loading .m-animation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .m-loading .m-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .m-loading .m-logo .u-image {
+      margin-right: 16px;
+      width: 80px;
+      height: 80px;
+    }
+    .m-loading .m-logo .u-text {
+      font-size: 28px;
+    }
+    .m-loading .u-slogan {
+      margin-top: 24px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loadingEl" class="m-loading" style="opacity: 0; display: none;">
+    <div id="animationEl" class="m-animation" style="opacity: 1;">
+      <div class="m-logo">
+        <div class="u-text">欢迎来到 <b>集智百科精品词条</b></div>
+      </div>
+      <div class="u-slogan"><i>知识从我而来，问题到我为止</i></div>
+    </div>
+  </div>
+  <div id="container" class="m-graph"></div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="selected_nodes.js"></script>
+<script src="selected_edges.js"></script>
+
+<script type="text/javascript">
+  var nodes = window.selectedNodes;
+  var edges = window.selectedEdges;
+
+  console.log(nodes);
+  console.log(edges);
+
+  const loadingEl = document.getElementById('loadingEl')
+  const animationEl = document.getElementById('animationEl')
+  animationEl.style.opacity = 1
+  setTimeout(() => {
+    loadingEl.style.opacity = 0
+    setTimeout(() => {
+      loadingEl.style.display = 'none'
+    }, 1000)
+  }, 3000)
+  
+  var dom = document.getElementById("container");
+  var myChart = echarts.init(dom);
+
+  Promise.resolve([nodes, edges]).then(res => {
+    const linkCount = new Map()
+    const links = res[1].map(item => {
+      linkCount.set(item.source_id, (linkCount.get(item.source_id) || 0) + 1)
+      linkCount.set(item.target_id, (linkCount.get(item.target_id) || 0) + 1)
+
+      return {
+        source: 'node_' + item.source_id,
+        target: 'node_' + item.target_id
+      }
+    })
+
+    const now = Date.now()
+    const RECENT_DAYS = 7
+    const recentUpdatedThreshold = RECENT_DAYS * 24 * 60 * 60 * 1000
+
+    const nodes = res[0].map(item => {
+      const count = linkCount.get(item.id) || 1
+      const isRecentlyUpdated = item.updated_at && (now - new Date(item.updated_at)) < recentUpdatedThreshold
+
+      const node = {
+        id: 'node_' + item.id,
+        name: item.name,
+        value: item.id,
+        symbolSize: count >= 15 ? count / 1.5 : count * 3 + 15,
+        category: 'type-' + item.type,
+        tooltip: { formatter: '{b}' },
+        emphasis: { label: { show: true } },
+        url: item.url,
+        updated_at: item.updated_at,
+        label: { show: true, fontSize: 14 }
+      }
+
+      if (isRecentlyUpdated) {
+        node.itemStyle = {
+          borderColor: '#FFCC00',
+          borderWidth: 3
+        }
+        node.label = {
+          show: true,
+          fontWeight: 'bold',
+          fontSize: 16
+        }
+      }
+
+      return node
+    })
+
+    const categories = Array.from(new Set(res[0].map(node => node.type)))
+      .map(type => ({ name: 'type-' + type }))
+
+    const data = { nodes, links, categories }
+
+    const option = {
+      title: {
+        text: '集智百科精品词条动态图',
+        subtext: '点击节点前往wiki页面',
+        left: 'center',
+        textStyle: {
+          fontSize: 24
+        }
+      },
+      tooltip: { show: true },
+      legend: {
+        show: false
+      },
+      series: [
+        {
+          type: 'graph',
+          layout: 'force',
+          draggable: true,
+          data: data.nodes,
+          links: data.links,
+          categories: data.categories,
+          roam: true,
+          label: {
+            show: true,
+            position: 'bottom',
+            fontSize: 14
+          },
+          force: {
+            initLayout: 'circular',
+            repulsion: 300,
+            edgeLength: 150,
+            gravity: 0.08
+          },
+          lineStyle: { 
+            opacity: 0.5,
+            width: 2
+          },
+          emphasis: { 
+            focus: 'adjacency',
+            lineStyle: {
+              width: 4
+            }
+          }
+        }
+      ]
+    }
+
+    myChart.setOption(option)
+
+    myChart.dispatchAction({
+      type: 'graphRoam',
+      zoom: 0.5
+    })
+
+    // 添加点击跳转功能
+    myChart.on('click', function (event) {
+      if (event.dataType === 'node' && event.data.url) {
+        window.open(event.data.url, '_blank', 'noopener')
+      }
+    })
+
+    // 添加 effectScatter 闪烁层（在图渲染后添加）
+    myChart.on('finished', function () {
+      const graphSeries = myChart.getOption().series.find(s => s.type === 'graph')
+      const recentEffectPoints = []
+
+      for (let i = 0; i < graphSeries.data.length; i++) {
+        const node = graphSeries.data[i]
+        if (node.itemStyle && node.itemStyle.borderColor === '#FFCC00' && node.x != null && node.y != null) {
+          recentEffectPoints.push({
+            name: node.name,
+            value: [node.x, node.y],
+            symbolSize: node.symbolSize + 10
+          })
+        }
+      }
+
+      if (recentEffectPoints.length > 0) {
+        myChart.setOption({
+          series: [
+            ...myChart.getOption().series,
+            {
+              type: 'effectScatter',
+              coordinateSystem: null,
+              data: recentEffectPoints,
+              rippleEffect: {
+                scale: 2.5,
+                brushType: 'stroke'
+              },
+              itemStyle: {
+                color: '#FFCC00'
+              },
+              z: 100
+            }
+          ]
+        })
+      }
+    })
+
+    window.addEventListener('resize', function () {
+      myChart.resize()
+    })
+  })
+
+  window.addEventListener('resize', function () {
+    myChart.resize()
+  })
+</script>
+
+</body>
+</html>

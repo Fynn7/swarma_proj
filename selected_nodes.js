@@ -1,0 +1,21 @@
+selectedNodes = [
+  {"id": 47, "name": "系统科学", "url": "https://wiki.swarma.org/index.php?title=系统科学", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 85, "name": "网络科学", "url": "https://wiki.swarma.org/index.php?title=网络科学", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 48, "name": "系统论", "url": "https://wiki.swarma.org/index.php?title=系统论", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 11, "name": "信息论", "url": "https://wiki.swarma.org/index.php?title=信息论", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 35, "name": "控制论", "url": "https://wiki.swarma.org/index.php?title=控制论", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 88, "name": "奇点", "url": "https://wiki.swarma.org/index.php?title=奇点", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 197, "name": "复杂系统 Complex Systems", "url": "https://wiki.swarma.org/index.php?title=复杂系统 Complex Systems", "is_emphasis": false, "updated_at": "2025-10-15T09:18:46Z", "type": 0},
+  {"id": 84, "name": "相变", "url": "https://wiki.swarma.org/index.php?title=相变", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 137, "name": "自组织", "url": "https://wiki.swarma.org/index.php?title=自组织", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 39, "name": "涌现", "url": "https://wiki.swarma.org/index.php?title=涌现", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 24, "name": "混沌理论", "url": "https://wiki.swarma.org/index.php?title=混沌理论", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 153, "name": "无标度网络", "url": "https://wiki.swarma.org/index.php?title=无标度网络", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 70, "name": "人工神经网络", "url": "https://wiki.swarma.org/index.php?title=人工神经网络", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 162, "name": "沙堆模型", "url": "https://wiki.swarma.org/index.php?title=沙堆模型", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 73, "name": "康威的生命游戏", "url": "https://wiki.swarma.org/index.php?title=康威的生命游戏", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 71, "name": "元胞自动机", "url": "https://wiki.swarma.org/index.php?title=元胞自动机", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 156, "name": "邓巴数", "url": "https://wiki.swarma.org/index.php?title=邓巴数", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 9, "name": "统计力学", "url": "https://wiki.swarma.org/index.php?title=统计力学", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0},
+  {"id": 138, "name": "计算社会科学", "url": "https://wiki.swarma.org/index.php?title=计算社会科学", "is_emphasis": false, "updated_at": "2020-01-01T00:00:00Z", "type": 0}
+]
